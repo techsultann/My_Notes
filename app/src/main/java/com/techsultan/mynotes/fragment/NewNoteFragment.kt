@@ -1,11 +1,15 @@
 package com.techsultan.mynotes.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
+import com.github.dhaval2404.colorpicker.listener.ColorListener
+import com.github.dhaval2404.colorpicker.model.ColorSwatch
 import com.techsultan.mynotes.R
 import com.techsultan.mynotes.databinding.FragmentNewNoteBinding
 
@@ -33,7 +37,22 @@ class NewNoteFragment : Fragment() {
         }
 
         binding.saveBtn.setOnClickListener {  }
-        binding.colorFabBtn.setOnClickListener {  }
+
+        binding.colorFabBtn.setOnClickListener {
+            MaterialColorPickerDialog
+                .Builder(requireActivity())
+                .setColorSwatch(ColorSwatch._500)
+                .setDefaultColor("")
+                .setColorListener(object : ColorListener {
+                    override fun onColorSelected(color: Int, colorHex: String) {
+                        TODO("Not yet implemented")
+                    }
+                })
+                .setDismissListener {
+                    Log.d("MaterialDialogPicker", "Handle Dismiss Event")
+                }
+                .show()
+        }
     }
 
 
