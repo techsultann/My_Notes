@@ -1,6 +1,7 @@
 package com.techsultan.mynotes.fragment
 
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -43,24 +44,46 @@ class NewNoteFragment : Fragment() {
 
         binding.saveBtn.setOnClickListener {  }
 
+        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-        binding.colorFabBtn.setOnClickListener {
-            var mMaterialColor = ""
-            MaterialColorPickerDialog
-                .Builder(requireActivity())
-                .setColorSwatch(ColorSwatch._500)
-                .setDefaultColor(mMaterialColor)
-                .setColorListener(object : ColorListener {
-                    override fun onColorSelected(color: Int, colorHex: String) {
-                        mMaterialColor = colorHex
-                        setTextFieldBackground(binding.etNote, color)
+            binding.colorFabBtn.setOnClickListener {
+                var mMaterialColor = ""
+                MaterialColorPickerDialog
+                    .Builder(requireActivity())
+                    .setColorSwatch(ColorSwatch._500)
+                    .setDefaultColor(mMaterialColor)
+                    .setColorListener(object : ColorListener {
+                        override fun onColorSelected(color: Int, colorHex: String) {
+                            mMaterialColor = colorHex
+                            setTextFieldBackground(binding.etNote, color)
+                        }
+                    })
+                    .setDismissListener {
+                        Log.d("MaterialDialogPicker", "Handle Dismiss Event")
                     }
-                })
-                .setDismissListener {
-                    Log.d("MaterialDialogPicker", "Handle Dismiss Event")
-                }
-                .show()
+                    .show()
+            }
+        } else {
+
+            binding.colorFabBtn.setOnClickListener {
+                MaterialColorPickerDialog
+                    .Builder(requireContext())
+                    .setColorSwatch(ColorSwatch.A200)
+                    .setDefaultColor("")
+                    .setColorListener( object : ColorListener {
+                        override fun onColorSelected(color: Int, colorHex: String) {
+                            TODO("Not yet implemented")
+                        }
+                    })
+                    .setDismissListener{
+                        Log.d("Material bottom sheet", "Handle dismiss event")
+                    }
+                    .showBottomSheet(childFragmentManager)
+            }
         }
+
+
+
     }
 
     private fun setTextFieldBackground(textField: AppCompatEditText, color: Int) {
