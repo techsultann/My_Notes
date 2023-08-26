@@ -6,11 +6,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.techsultan.mynotes.repository.NoteRepository
 
 class NoteViewModelFactory(
-    private val app: Application,
-    private val repository : NoteRepository
+    private val app: Application
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return NoteViewModel(app, repository) as T
+        return NoteViewModel(app) as T
     }
 }

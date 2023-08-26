@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.github.dhaval2404.colorpicker.listener.ColorListener
 import com.github.dhaval2404.colorpicker.model.ColorSwatch
