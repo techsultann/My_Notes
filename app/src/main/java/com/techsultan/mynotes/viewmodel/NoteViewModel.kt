@@ -5,7 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.techsultan.mynotes.models.Note
-import com.techsultan.mynotes.repository.NoteRepository
 
 class NoteViewModel(
     private val app: Application

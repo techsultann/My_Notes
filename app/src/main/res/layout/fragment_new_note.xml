@@ -47,37 +47,85 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:hint="Note Title"
-        android:padding="16dp"
+        android:background="@null"
+        android:padding="8dp"
+        android:ems="10"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_on_btn" />
 
+    <TextView
+        android:id="@+id/date_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:padding="8dp"
+        android:text="Date"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/note_title_et" />
+
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/et_note"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:gravity="top"
+        android:padding="8dp"
+        android:background="@null"
         android:focusable="true"
+        android:gravity="top"
         android:hint="Note"
         android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/chipGroup_note_add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date_tv" />
+
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup_note_add"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/note_title_et" />
+        app:singleSelection="true"
+          >
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_low_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Low Priority" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_medium_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium Priority" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_high_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="High Proprity" />
+
+    </com.google.android.material.chip.ChipGroup>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/color_fab_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="68dp"
         android:src="@drawable/ic_color_lens"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

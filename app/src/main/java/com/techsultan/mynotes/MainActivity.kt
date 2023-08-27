@@ -3,9 +3,7 @@ package com.techsultan.mynotes
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import com.techsultan.mynotes.database.NoteDao
 import com.techsultan.mynotes.databinding.ActivityMainBinding
-import com.techsultan.mynotes.repository.NoteRepository
 import com.techsultan.mynotes.viewmodel.NoteViewModel
 import com.techsultan.mynotes.viewmodel.NoteViewModelFactory
 

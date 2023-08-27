@@ -60,4 +60,7 @@ dependencies {
 
     //Color picker
     implementation 'com.github.Dhaval2404:ColorPicker:2.3'
+
+    // Koin for Android
+    implementation "io.insert-koin:koin-android:3.4.3"
 }

@@ -3,12 +3,14 @@ package com.techsultan.mynotes.fragment
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.navigation.fragment.findNavController
@@ -19,6 +21,9 @@ import com.github.dhaval2404.colorpicker.model.ColorSwatch
 import com.techsultan.mynotes.R
 import com.techsultan.mynotes.databinding.FragmentNewNoteBinding
 import com.thebluealliance.spectrum.internal.ColorUtil
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 
 class NewNoteFragment : Fragment() {
@@ -30,12 +35,13 @@ class NewNoteFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentNewNoteBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -44,6 +50,8 @@ class NewNoteFragment : Fragment() {
         }
 
         binding.saveBtn.setOnClickListener {  }
+
+        getCurrentTime()
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
 
@@ -85,6 +93,15 @@ class NewNoteFragment : Fragment() {
 
 
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getCurrentTime() {
+
+        val currentTime = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+        val formatted = currentTime.format(formatter)
+        binding.dateTv!!.text = formatted
     }
 
     private fun setTextFieldBackground(textField: AppCompatEditText, color: Int) {
