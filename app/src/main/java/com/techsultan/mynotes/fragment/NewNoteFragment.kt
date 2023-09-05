@@ -1,5 +1,6 @@
 package com.techsultan.mynotes.fragment
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
@@ -13,13 +14,16 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.WorkManager
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.github.dhaval2404.colorpicker.listener.ColorListener
 import com.github.dhaval2404.colorpicker.model.ColorSwatch
 import com.techsultan.mynotes.R
 import com.techsultan.mynotes.databinding.FragmentNewNoteBinding
+import com.techsultan.mynotes.viewmodel.NoteViewModel
 import com.thebluealliance.spectrum.internal.ColorUtil
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -30,6 +34,7 @@ class NewNoteFragment : Fragment() {
 
     private var _binding : FragmentNewNoteBinding? = null
     private val binding get() = _binding!!
+    private val noteViewModel : NoteViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -89,6 +94,12 @@ class NewNoteFragment : Fragment() {
                     }
                     .showBottomSheet(childFragmentManager)
             }
+
+            binding.saveBtn.setOnClickListener {
+
+                noteViewModel.saveNoteInBackground("Note saved").toString()
+            }
+
         }
 
 

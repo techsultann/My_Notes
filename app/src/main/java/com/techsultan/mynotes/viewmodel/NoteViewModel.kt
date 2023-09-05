@@ -1,10 +1,20 @@
 package com.techsultan.mynotes.viewmodel
 
 import android.app.Application
+import android.content.Context
+import android.os.Build
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.work.Constraints
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.techsultan.mynotes.models.Note
+import com.techsultan.mynotes.work_manager.NoteWorker
+import java.time.Duration
 
 class NoteViewModel(
     private val app: Application
@@ -12,6 +22,7 @@ class NoteViewModel(
 
     private val _notes = MutableLiveData<List<Note>>()
     val notes: LiveData<List<Note>> = _notes
+    private val workManager = WorkManager.getInstance(getApplication())
 
     init {
         _notes.value = listOf(
@@ -39,5 +50,43 @@ class NoteViewModel(
         )
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun saveNoteInBackground(noteText: String) {
+
+        val constraints = Constraints.Builder()
+            .setTriggerContentMaxDelay(Duration.ofSeconds(10))
+            .build()
+
+        val workRequest = OneTimeWorkRequestBuilder<NoteWorker>()
+            .setConstraints(constraints)
+            .setInputData(NoteWorker.createInputData(noteText))
+            .build()
+
+        WorkManager.getInstance(app).enqueue(workRequest)
+
+        WorkManager.getInstance(app).getWorkInfoByIdLiveData(workRequest.id)
+            .observeForever { workInfo ->
+
+                if (workInfo != null) {
+                    when (workInfo.state) {
+                        //Background task succeeded
+                        WorkInfo.State.SUCCEEDED -> {
+
+                        }
+                        //Background task failed
+                        WorkInfo.State.FAILED -> {
+
+                        }
+
+                        else -> {
+                            // Do something
+                        }
+                    }
+                }
+
+            }
+
+    }
 
 }
