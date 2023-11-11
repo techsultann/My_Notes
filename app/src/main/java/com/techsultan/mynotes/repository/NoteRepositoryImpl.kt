@@ -1,15 +1,15 @@
 package com.techsultan.mynotes.repository
 
+import com.techsultan.mynotes.database.NoteDao
 import com.techsultan.mynotes.models.Note
 
 
-interface NoteRepository {
+class NoteRepositoryImpl(private val dao: NoteDao) {
 
-    fun addNote(noteList : List<Note>)
-}
-class NoteRepositoryImpl : NoteRepository {
+    suspend fun addNote(note: Note) = dao.addNote(note)
+    suspend fun updateNote(note: Note) = dao.updateNote(note)
+    suspend fun deleteNote(note: Note) = dao.deleteNote(note)
+    fun getAllNotes() = dao.getAllNote()
+    fun searchNote(query: String?) = dao.searchNote(query)
 
-    override fun addNote(noteList: List<Note>) {
-        TODO("Not yet implemented")
-    }
 }

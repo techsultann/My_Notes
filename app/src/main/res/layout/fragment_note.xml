@@ -7,7 +7,59 @@
     tools:context=".fragment.NoteFragment">
 
 
-    <TextView
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            style="?attr/collapsingToolbarLayoutMediumSize"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:contentScrim="@color/primary_color"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/collapsingToolbarLayoutMediumSize">
+
+
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/materialToolBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_collapseMode="pin"
+                android:elevation="0dp">
+
+                <TextView
+                    android:id="@+id/noteTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="My Notes"
+                    android:textSize="32sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search note here" />
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+    <!--<TextView
         android:id="@+id/noteTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,9 +80,10 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:hint="Search notes"
+        android:contentDescription="search for notes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/noteTextView" />
+        app:layout_constraintTop_toBottomOf="@id/noteTextView" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -43,7 +96,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchBar"
+        app:layout_constraintTop_toBottomOf="@id/appBBarLayout"
         tools:listitem="@layout/note_items" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton

@@ -2,10 +2,12 @@ package com.techsultan.mynotes.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.techsultan.mynotes.databinding.NoteItemsBinding
+import com.techsultan.mynotes.fragment.NoteFragmentDirections
 import com.techsultan.mynotes.models.Note
 
 class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
@@ -52,6 +54,10 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
         }
 
+        holder.itemView.setOnClickListener {
+            val directions = NoteFragmentDirections.actionNoteFragmentToNewNoteFragment(currentNote)
+            it.findNavController().navigate(directions)
+        }
 
     }
 

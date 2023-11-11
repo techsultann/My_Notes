@@ -11,19 +11,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.WorkManager
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.github.dhaval2404.colorpicker.listener.ColorListener
 import com.github.dhaval2404.colorpicker.model.ColorSwatch
+import com.google.android.material.snackbar.Snackbar
+import com.techsultan.mynotes.NoteApplication
 import com.techsultan.mynotes.R
 import com.techsultan.mynotes.databinding.FragmentNewNoteBinding
+import com.techsultan.mynotes.models.Note
+import com.techsultan.mynotes.repository.NoteRepositoryImpl
 import com.techsultan.mynotes.viewmodel.NoteViewModel
+import com.techsultan.mynotes.viewmodel.NoteViewModelFactory
 import com.thebluealliance.spectrum.internal.ColorUtil
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -34,7 +42,12 @@ class NewNoteFragment : Fragment() {
 
     private var _binding : FragmentNewNoteBinding? = null
     private val binding get() = _binding!!
-    private val noteViewModel : NoteViewModel by viewModels()
+    private val noteViewModel : NoteViewModel by viewModels {
+        val application = activity?.applicationContext
+        NoteViewModelFactory((application as NoteApplication).repository)
+    }
+    private val safeArgs : NewNoteFragmentArgs by navArgs()
+    private lateinit var currentNote: Note
 
 
     override fun onCreateView(
@@ -50,13 +63,19 @@ class NewNoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.imgBack.setOnClickListener {
-            findNavController().navigate(R.id.action_newNoteFragment_to_noteFragment)
+        currentNote = safeArgs.note
+
+        updateNote()
+
+        binding.saveBtn.setOnClickListener {
+            saveNote()
         }
 
-        binding.saveBtn.setOnClickListener {  }
 
-        getCurrentTime()
+        val currentTime = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+        val formatted = currentTime.format(formatter).toString()
+        binding.dateTv!!.text = formatted
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
 
@@ -95,11 +114,6 @@ class NewNoteFragment : Fragment() {
                     .showBottomSheet(childFragmentManager)
             }
 
-            binding.saveBtn.setOnClickListener {
-
-                noteViewModel.saveNoteInBackground("Note saved").toString()
-            }
-
         }
 
 
@@ -107,12 +121,77 @@ class NewNoteFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getCurrentTime() {
+    fun initializeNewNote() {
 
         val currentTime = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
-        val formatted = currentTime.format(formatter)
-        binding.dateTv!!.text = formatted
+        val formatted = currentTime.format(formatter).toString()
+         binding.noteTitleEt.text?.clear()
+         binding.etNote.text?.clear()
+         binding.dateTv?.text = formatted
+    }
+
+    fun editNote () {
+
+    }
+
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun saveNote() {
+
+        val currentTime = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+        val formatted = currentTime.format(formatter).toString()
+        val noteTitle = binding.noteTitleEt.text.toString().trim()
+        val noteBody = binding.etNote.text.toString().trim()
+       // val dateTime = formatted
+
+        if (currentNote.id == 0) {
+            val saveNote = Note(0, noteTitle, noteBody, formatted)
+
+            noteViewModel.addNote(saveNote)
+            Snackbar.make(
+                requireView(),
+                "Note saved Successfully",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        } else {
+            val updateNote = Note(currentNote.id, noteTitle, noteBody, formatted)
+            noteViewModel.updateNote(updateNote)
+            Snackbar.make(
+                requireView(),
+                "Note saved Successfully",
+                Snackbar.LENGTH_SHORT
+            ).show()
+
+        }
+
+
+        findNavController().popBackStack()
+
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun updateNote() {
+
+        currentNote = safeArgs.note
+
+        binding.noteTitleEt.setText(currentNote.noteTitle)
+        binding.dateTv!!.text = currentNote.date
+        binding.etNote.setText(currentNote.note)
+
+        /*binding.saveBtn.setOnClickListener {
+
+            val noteTitle = binding.noteTitleEt.text.toString().trim()
+            val noteBody = binding.etNote.text.toString().trim()
+            val currentTime = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+            val formatted = currentTime.format(formatter).toString()
+
+        }*/
+
     }
 
     private fun setTextFieldBackground(textField: AppCompatEditText, color: Int) {
